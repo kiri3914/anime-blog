@@ -12,8 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import os.path
 from pathlib import Path
-
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import django.middleware.cache
+import whitenoise
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -24,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w3r+2##8xdq(9m09=&@vtsyolttycb84veib4@!i9i(g!#oi8p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -81,6 +85,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+db = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db)
 
 
 # Password validation
